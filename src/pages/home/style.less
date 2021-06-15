@@ -1,0 +1,39 @@
+@import '~antd/es/style/themes/compact.less';
+
+@size: 42px;
+
+body {
+  color: fff;
+  background-color: #282c34;
+}
+
+.app {
+  padding: @size;
+  text-align: center;
+
+  h3 {
+    color: #fff;
+    font-size: @size;
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+  }
+
+  .logo {
+    height: 20vmin;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .logo {
+      animation: logo-spin infinite 5s linear;
+    }
+  }
+
+  @keyframes logo-spin {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+}
