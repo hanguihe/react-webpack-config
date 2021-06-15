@@ -4,8 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack serve --config config/config.js",
-    "build": "cross-env NODE_ENV=production webpack --config config/config.js",
+    "start:mock": "nodemon --config config/nodemon.json",
+    "start": "cross-env NODE_ENV=development webpack serve --config config/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config config/webpack.config.js",
     "prettier": "prettier -c --write \"src/**/*\"",
     "style-fix": "stylelint --fix \"src/**/*.less\" --syntax less",
     "eslint-fix": "eslint --fix --cache --ext .js,.jsx,.ts,.tsx --format=pretty ./src"
@@ -33,12 +34,16 @@
     "html-webpack-plugin": "^5.3.1",
     "less": "^4.1.1",
     "less-loader": "^9.0.0",
+    "map-stream": "^0.0.7",
     "mini-css-extract-plugin": "^1.6.0",
+    "nodemon": "^2.0.7",
     "prettier": "^2.3.0",
     "react-refresh": "^0.10.0",
     "style-loader": "^2.0.0",
+    "through2": "^4.0.2",
     "typescript": "^4.2.4",
     "url-loader": "^4.1.1",
+    "vinyl-fs": "^3.0.3",
     "webpack": "^5.37.1",
     "webpack-cli": "^4.7.0",
     "webpack-dev-server": "^3.11.2"

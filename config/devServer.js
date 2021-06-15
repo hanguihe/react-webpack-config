@@ -1,3 +1,6 @@
+const { join } = require('path');
+const mockServer = require('./mock');
+
 const server = {
   // 允许访问本地服务的白名单
   allowedHosts: [],
@@ -16,6 +19,7 @@ const server = {
   // 开启模块热替换
   hot: true,
   hotOnly: false,
+  noInfo: true,
   // 自动打开浏览器
   open: false,
   // 构建错误后是否全屏显示错误信息
@@ -27,9 +31,12 @@ const server = {
   stats: 'none',
   // 是否允许使用本地IP打开
   useLocalIp: false,
-  // 其他项
-  // before: () => {},
-  // after: () => {},
 };
+
+if (process.env.MOCK) {
+  server.before = (app) => {
+    mockServer(join(__dirname, '../mock'), app);
+  };
+}
 
 module.exports = server;

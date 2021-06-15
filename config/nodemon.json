@@ -1,0 +1,11 @@
+{
+  "verbose": false,
+  "env": {
+    "NODE_ENV": "development",
+    "MOCK": true
+  },
+  "ext": "js,json",
+  "watch": ["mock", "config"],
+  "delay": 1500,
+  "exec": "webpack serve --config config/webpack.config.js"
+}

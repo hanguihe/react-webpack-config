@@ -84,7 +84,6 @@ module.exports = {
             loader: require.resolve('babel-loader'),
             include: resolveFile('src'),
             options: {
-              // customize: require.resolve("@babel/preset-react")
               babelrc: false,
               configFile: false,
               presets: [
@@ -130,31 +129,9 @@ module.exports = {
               {
                 loader: require.resolve('css-loader'),
                 options: {
-                  importLoaders: 1,
                   sourceMap: isDevelopment,
                   modules: {
                     auto: true,
-                  },
-                },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  postcssOptions: {
-                    sourceMap: isDevelopment,
-                    plugins: [
-                      require('postcss-flexbugs-fixes'),
-                      [
-                        require('postcss-preset-env'),
-                        {
-                          autoprefixer: {
-                            flexbox: 'no-2009',
-                          },
-                          stage: 3,
-                        },
-                      ],
-                      require('postcss-normalize')(),
-                    ],
                   },
                 },
               },
@@ -173,31 +150,10 @@ module.exports = {
               {
                 loader: require.resolve('css-loader'),
                 options: {
-                  importLoaders: 3,
+                  importLoaders: 1,
                   sourceMap: isDevelopment,
                   modules: {
                     auto: true,
-                  },
-                },
-              },
-              {
-                loader: require.resolve('postcss-loader'),
-                options: {
-                  postcssOptions: {
-                    sourceMap: isDevelopment,
-                    plugins: [
-                      require('postcss-flexbugs-fixes'),
-                      [
-                        require('postcss-preset-env'),
-                        {
-                          autoprefixer: {
-                            flexbox: 'no-2009',
-                          },
-                          stage: 3,
-                        },
-                      ],
-                      require('postcss-normalize')(),
-                    ],
                   },
                 },
               },
@@ -214,7 +170,7 @@ module.exports = {
           },
           {
             loader: require.resolve('file-loader'),
-            exclude: [/\.(js|jsx|ts|tsx)$/, /\.html$/, /\.json$/],
+            exclude: [/\.(js|jsx|ts|tsx|html|json)$/],
             options: {
               name: 'static/[name].[ext]',
             },
