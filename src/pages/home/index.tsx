@@ -25,7 +25,7 @@ const Home: FC = () => {
     <div className="app">
       <img src={logo} alt="logo" className="logo" />
       <Title text="Hello, Webpack!!!" />
-      <Button type="primary">GOT IT!</Button>
+      <Button type="primary">GOT IT!！！!</Button>
       <Title text={`计时器：${value}`} />
     </div>
   );
