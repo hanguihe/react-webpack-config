@@ -4,14 +4,15 @@ import MiniCssExtractPlugin from 'mini-css-extract-plugin';
 import { ESBuildMinifyPlugin } from 'esbuild-loader';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
-
-import { HotModuleReplacementPlugin, ProgressPlugin } from 'webpack';
+import { Configuration, HotModuleReplacementPlugin, ProgressPlugin } from 'webpack';
+import devServer from './devServer';
 
 export default (env: string) => {
   const isDevelopment = env === 'development';
   const isProduction = env === 'production';
 
   return {
+    devServer: devServer(),
     mode: env,
     // 构建失败后是否直接退出流程
     bail: isProduction,
@@ -162,9 +163,6 @@ export default (env: string) => {
             {
               exclude: [/\.(js|jsx|ts|tsx|html|json)$/],
               type: 'asset/resource',
-              // options: {
-              //   name: 'static/[name].[ext]',
-              // },
             },
           ],
         },
@@ -187,7 +185,7 @@ export default (env: string) => {
           chunkFilename: '[name].[contenthash:8]-chunk.css',
         }),
     ].filter(Boolean),
-  };
+  } as Configuration;
 };
 
 function resolveFile(filePath: string) {

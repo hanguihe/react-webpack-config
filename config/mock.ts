@@ -1,8 +1,8 @@
-const { readdirSync, statSync } = require('fs');
-const { join } = require('path');
+import { readdirSync, statSync } from 'fs';
+import { join } from 'path';
 
 // 递归读取
-function readMockFile(filepath) {
+function readMockFile(filepath: string) {
   const res = [];
   const files = readdirSync(filepath);
 
@@ -21,7 +21,7 @@ function readMockFile(filepath) {
 }
 
 // 赋予API能力
-function create(mocks, app) {
+function create(mocks, app: any) {
   if (mocks == null || typeof mocks !== 'object') {
     throw new Error("mock file's exports must be an object");
   }
@@ -47,6 +47,6 @@ function create(mocks, app) {
   }
 }
 
-module.exports = (filepath, app) => {
+export default (filepath: string, app: any) => {
   readMockFile(filepath).forEach((item) => create(require(item), app));
 };

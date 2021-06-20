@@ -33,5 +33,5 @@
     ".prettierrc.js",
     "jest.config.js"
   ],
-  "exclude": ["node_modules", "build", "dist", "scripts", "config", "jest"]
+  "exclude": ["node_modules", "build", "dist", "jest"]
 }
