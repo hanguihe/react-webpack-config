@@ -23,15 +23,10 @@
   },
   "include": [
     "src/**/*",
-    "tests/**/*",
-    "test/**/*",
-    "__test__/**/*",
     "typings.d.ts",
-    "config/**/*",
     ".eslintrc.js",
     ".stylelintrc.js",
-    ".prettierrc.js",
-    "jest.config.js"
+    ".prettierrc.js"
   ],
-  "exclude": ["node_modules", "build", "dist", "jest"]
+  "exclude": ["node_modules",  "dist", "scripts"]
 }

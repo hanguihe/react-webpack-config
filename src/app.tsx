@@ -1,6 +1,8 @@
 import ReactDOM from 'react-dom';
-import App from '@/pages/home';
+import Home from './pages/home';
 
-const root = document.getElementById('root');
+import 'antd/dist/antd.compact.less';
+import './global.less';
 
-ReactDOM.render(<App />, root);
+const container = document.getElementById('root');
+ReactDOM.render(<Home />, container);

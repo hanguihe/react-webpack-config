@@ -1,28 +1,65 @@
 import fs from 'fs-extra';
-import webpack, { Configuration } from 'webpack';
-import config from '../config/webpack.config';
+import Webpack from 'webpack';
+import { getWebpackConfig } from './webpack';
+import { resolve, convertTime, convertBundleSize } from './utils';
 
-process.env.NODE_ENV = 'production';
+async function build() {
+  console.log('start bundle with webpack...');
+  process.env.NODE_ENV = 'production';
 
-const compiler = webpack(config('production') as Configuration);
+  console.log('clean dist directory');
+  fs.removeSync(resolve('dist'));
 
-console.log('clean dist directory');
-fs.emptyDirSync('dist');
+  console.log('start to compile...');
 
-console.log('copy public files');
-fs.copySync('public', 'dist', {
-  dereference: true,
-  filter: (file: string) => {
-    console.log(file);
-    return file !== 'public/index.html';
-  },
-});
+  const compiler = Webpack(getWebpackConfig('production'));
 
-console.log('start bundle...');
+  compiler.run((err, stats) => {
+    if (err) {
+      console.error('compile with errors');
+      throw err;
+    }
 
-compiler.run((err, stats) => {
-  if (err) {
-    console.log(1);
-    process.exit(0);
-  }
+    const info = stats?.toJson() || {};
+
+    if (Array.isArray(info.errors) && info.errors.length > 0) {
+      console.error('compile with errors');
+      info.errors.forEach((item) => {
+        console.error(item.moduleName);
+        console.log(item.message);
+      });
+      process.exit(1);
+    }
+
+    if (Array.isArray(info.warnings) && info.warnings.length > 0) {
+      console.warn('compile with warnings');
+      info.warnings.forEach((item) => {
+        console.warn(item.moduleName);
+        console.log(item.message);
+      });
+    }
+
+    console.log(`compile success in ${convertTime(info.time)}`);
+
+    console.log('copy public files');
+    fs.copySync(resolve('public'), resolve('dist'), {
+      dereference: true,
+      filter: (file: string) => !file.includes('index.html'),
+    });
+
+    if (Array.isArray(info.assets) && info.assets.length > 0) {
+      const res = info.assets.map((item) => ({
+        name: item.name,
+        type: item.type,
+        size: convertBundleSize(item.size),
+      }));
+
+      console.table(res);
+    }
+  });
+}
+
+build().catch((err) => {
+  console.log(err);
+  process.exit(1);
 });

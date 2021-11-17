@@ -1,46 +1,54 @@
+import Webpack from 'webpack';
 import Server from 'webpack-dev-server';
-import webpack from 'webpack';
-import getWebpackConfig from '../config/webpack.config';
-import getServerConfig from '../config/devServer';
+import { getServerConfig, getWebpackConfig } from './webpack';
+import { convertTime } from './utils';
 
-process.env.NODE_ENV = 'development';
+async function start() {
+  console.log('start development server with webpack server...');
 
-const config = getWebpackConfig('development');
-const serverConfig = getServerConfig();
+  process.env.NODE_ENV = 'development';
 
-const compiler = webpack(config);
+  const compiler = Webpack(getWebpackConfig('development'));
+  const server = new Server(getServerConfig(), compiler);
 
-const server = new Server(compiler, serverConfig);
+  // 监听重新编译事件
+  compiler.hooks.invalid.tap('invalid', () => {
+    console.log('start compile...');
+  });
 
-compiler.hooks.invalid.tap('invalid', () => {
-  console.log('compiling...');
-});
-
-compiler.hooks.done.tap('done', (stats) => {
-  const json = stats.toJson({ all: false, errors: true, warnings: true });
-
-  if (Array.isArray(json.errors) && json.errors.length > 0) {
-    console.error('fail to compile..');
-    json.errors.forEach((item) => {
-      console.error(item.moduleName);
-      console.error(item.message);
+  // 监听编译完成事件
+  compiler.hooks.done.tap('done', (stats) => {
+    const info = stats?.toJson({
+      all: false,
+      errors: true,
+      warnings: true,
+      timings: true,
     });
-    return;
-  }
 
-  if (Array.isArray(json.warnings) && json.warnings.length > 0) {
-    console.warn('compile with warnings..');
-    console.warn(json.warnings.join('\n'));
-  }
+    if (Array.isArray(info.errors) && info.errors.length > 0) {
+      console.error('fail to compile');
 
-  console.log('success to compile \n');
-});
+      info.errors.forEach((item) => {
+        console.error(item.moduleName);
+        console.log(item.message);
+      });
+      return;
+    }
 
-server.listen(serverConfig.port || 3000, serverConfig.host || 'localhost', (err) => {
-  if (err) {
-    console.log(err);
-    return;
-  }
+    if (Array.isArray(info.warnings) && info.warnings.length > 0) {
+      console.warn('compile with warnings');
+      info.warnings.forEach((item) => {
+        console.warn(item.moduleName);
+        console.log(item.message);
+      });
+    }
 
-  console.log('start development server... \n');
+    console.log(`success to compile with ${convertTime(info.time)} \n`);
+  });
+
+  await server.start();
+}
+
+start().catch(() => {
+  process.exit(1);
 });

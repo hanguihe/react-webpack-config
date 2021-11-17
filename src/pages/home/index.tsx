@@ -2,7 +2,7 @@ import { FC, useEffect, useRef, useState } from 'react';
 import { Button } from 'antd';
 import Title from '@/components/text';
 import logo from '@/assets/logo.svg';
-import './style.less';
+import styles from './style.module.less';
 
 const Home: FC = () => {
   const [value, setState] = useState(1);
@@ -22,9 +22,9 @@ const Home: FC = () => {
   }, []);
 
   return (
-    <div className="app">
-      <img src={logo} alt="logo" className="logo" />
-      <Title text="Hello, Webpack!!!!!" />
+    <div className={styles.app}>
+      <img src={logo} alt="logo" className={styles.logo} />
+      <Title text="Hello, Webpack!!!" />
       <Button type="primary">GOT IT!!!</Button>
       <Title text={`计时器：${value}`} />
     </div>
