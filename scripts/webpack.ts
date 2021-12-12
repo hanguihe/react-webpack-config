@@ -5,7 +5,6 @@ import MiniCSSExtraPlugin from 'mini-css-extract-plugin';
 import HtmlWebpackPlugin from 'html-webpack-plugin';
 import ReactRefreshWebpackPlugin from '@pmmmwh/react-refresh-webpack-plugin';
 import config from './config';
-import { getBabelConfig } from './babel';
 import { resolve } from './utils';
 
 type ENV_MODE = 'production' | 'development';
@@ -75,10 +74,20 @@ export function getWebpackConfig(mode: ENV_MODE): Configuration {
         {
           oneOf: [
             {
-              test: /\.(ts|tsx|js|jsx)$/,
-              loader: require.resolve('babel-loader'),
+              test: /\.(ts?x|js?x)$/,
+              loader: require.resolve('swc-loader'),
               include: resolve('src'),
-              options: { ...getBabelConfig(isDevelopment) },
+              options: {
+                jsc: {
+                  target: 'es2015',
+                  transform: {
+                    react: {
+                      runtime: 'automatic',
+                      refresh: true,
+                    },
+                  },
+                },
+              },
             },
             {
               test: /\.css$/,
